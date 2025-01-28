@@ -3,7 +3,7 @@ namespace Telnet;
 
 use Telnet\Net\Server;
 
-require_once('../vendor/autoload.php');
+
 
 /**
  * PHP Telnet BBS Server
@@ -23,6 +23,7 @@ require_once('../vendor/autoload.php');
  */
 
  $env = parse_ini_file('../.env');
+
  $host = $env["HOST"];
  $port = $env["PORT"];
 

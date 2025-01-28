@@ -192,26 +192,30 @@ private function handleClientInteractions()
 
     private function sendBannerMessage($client)
     {
-        $bannerMessage = "
+        $bannerMessage = <<< DOC
 
- 
-*********************************************************************
-*                                                                   *
-*   _____ _          _____     _         _      _____ _____ _____   *
-*  |  _  | |_ ___   |_   _|___| |___ ___| |_   | __  | __  |   __|  *
-*  |   __|   | . |    | | | -_| |   | -_|  _|  | __ -| __ -|__   |  *
-*  |__|  |_|_|  _|    |_| |___|_|_|_|___|_|    |_____|_____|_____|  *
-*          |_|                                                      *
-*                                                                   *
-*********************************************************************
-*                                                                   *
-*                 Welcome to Php Telnet BBS Server!                 *
-*                                                                   *
-*                   To register, type 'register'.                   *
-*                       To login, type 'login'.                     *
-*                                                                   *
-*********************************************************************
-";
+                                                                                                       
+                                                                                                       
+__________     ___                                   ____                                              
+MMMMMMMMMM     `MM                                  6MMMMb\                                            
+/   MM   \      MM                     /           6M'    `                                            
+    MM   ____   MM ___  __     ____   /M           MM         ____  ___  __ ____    ___  ____  ___  __ 
+    MM  6MMMMb  MM `MM 6MMb   6MMMMb /MMMMM        YM.       6MMMMb `MM 6MM `MM(    )M' 6MMMMb `MM 6MM 
+    MM 6M'  `Mb MM  MMM9 `Mb 6M'  `Mb MM            YMMMMb  6M'  `Mb MM69 "  `Mb    d' 6M'  `Mb MM69 " 
+    MM MM    MM MM  MM'   MM MM    MM MM                `Mb MM    MM MM'      YM.  ,P  MM    MM MM'    
+    MM MMMMMMMM MM  MM    MM MMMMMMMM MM                 MM MMMMMMMM MM        MM  M   MMMMMMMM MM     
+    MM MM       MM  MM    MM MM       MM                 MM MM       MM        `Mbd'   MM       MM     
+    MM YM    d9 MM  MM    MM YM    d9 YM.  ,       L    ,M9 YM    d9 MM         YMP    YM    d9 MM     
+   _MM_ YMMMM9 _MM__MM_  _MM_ YMMMM9   YMMM9       MYMMMM9   YMMMM9 _MM_         M      YMMMM9 _MM_    
+                                                                                                       
+                                                                                                       
+                                     Welcome to Php Telnet BBS Server!                 
+                                                                   
+                                      To register, type 'register'.                   
+                                      To login, type 'login'.                     
+                                                                   
+
+DOC;
         fwrite($client, $bannerMessage);
     }
 }
