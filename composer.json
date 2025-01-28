@@ -13,7 +13,7 @@
             "email": "74384683+ManueldG@users.noreply.github.com"
         }
     ],
-    "minimum-stability": "dev"|"beta",
+    "minimum-stability": "beta",
     "require": {}
 }
 
