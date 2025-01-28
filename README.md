@@ -1,6 +1,6 @@
 # Telnet PHP BBS Server
 
-This repository 
+This repository cloned from https://github.com/Rotron/telnet-php-bbs-server modified and customized
 
 ## Usage
 
