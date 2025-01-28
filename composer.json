@@ -1,7 +1,7 @@
 {
     "name": "manueldg/server-socket",
     "type": "project",
-    "license": "GPL",
+    "license": "GPL-3.0-only",
     "autoload": {
         "psr-4": {
             "Telnet\\": "src/"
@@ -13,7 +13,7 @@
             "email": "74384683+ManueldG@users.noreply.github.com"
         }
     ],
-    "minimum-stability": "dev|beta",
+    "minimum-stability": "dev"|"beta",
     "require": {}
 }
 
