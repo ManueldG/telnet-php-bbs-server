@@ -4,6 +4,10 @@ namespace Telnet;
 use Telnet\Net\Server;
 
 
+ //IN PROGRESS  Pulizia codice  in corso
+ //TODO  licenza
+ //TODO documentazione 
+ //TODO area per altre pagine 
 
 /**
  * PHP Telnet BBS Server

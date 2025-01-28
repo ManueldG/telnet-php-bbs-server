@@ -6,8 +6,8 @@ use Telnet\Net\Client;
 
 class Server
 {
-    private $host;
-    private $port;
+    private string $host;
+    private int $port;
     
     private $serverSocket;
     private $clients = [];
@@ -20,24 +20,25 @@ class Server
         
     }
 
-    public function initializeDatabase()
+    public function initializeDatabase():void
     {
         $dbFile = 'database.sqlite';
         $this->pdo = new \PDO('sqlite:' . $dbFile);
         $this->createUsersTable();
     }
 
-    private function createUsersTable()
+    private function createUsersTable():void
     {
         $sql = "CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nickname VARCHAR(255) NOT NULL UNIQUE,
                     password VARCHAR(255) NOT NULL
                 )";
+                
         $this->pdo->exec($sql);
     }
 
-    public function start()
+    public function start():void
     {
         $this->createServerSocket();
 
@@ -52,7 +53,7 @@ class Server
         }
     }
 
-    private function createServerSocket()
+    private function createServerSocket():void
     {
         try{
 
@@ -68,13 +69,11 @@ class Server
     }
 
 
-private function handleIncomingConnections()
-{    
-    
+private function handleIncomingConnections():void
+{        
     $connections[] = $this->serverSocket;
     
-     // look for new connections
-     
+     // look for new connections     
      if ($sock = @stream_socket_accept($this->serverSocket, empty($connections) ? -1 : 0, $peer)) {
         
         //puntatore allo stream
@@ -86,8 +85,7 @@ private function handleIncomingConnections()
         
         fwrite($sock, 'Hello '.$peer.PHP_EOL); //scrivo al client
 
-        $connections[] = $sock; //associo il puntatore alla connessione es $connections[127.0.0.1:51575]
-        
+        $connections[] = $sock;         
 
     }    
 
@@ -120,9 +118,7 @@ private function handleIncomingConnections()
 
 }
 
-
-
-private function handleClientInteractions()
+private function handleClientInteractions():void
 {
     foreach ($this->clients as $key => $client) {
 
@@ -159,7 +155,7 @@ private function handleClientInteractions()
 }
 
 
-    private function handleAuthenticatedClientInput($client, $input)
+    private function handleAuthenticatedClientInput($client, $input):void
     {
         switch ($input) {
             case 'exit':
@@ -179,7 +175,7 @@ private function handleClientInteractions()
         }
     }
 
-    private function handleUnauthenticatedClientInput($client, $input)
+    private function handleUnauthenticatedClientInput($client, $input):void
     {
        
         switch ($input) {
@@ -195,7 +191,7 @@ private function handleClientInteractions()
         }
     }
 
-    private function sendBannerMessage($client)
+    private function sendBannerMessage($client):void
     {
         $bannerMessage = <<< DOC
 

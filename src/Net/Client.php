@@ -12,7 +12,7 @@ class Client
         $this->pdo = $pdo;
     }
 
-    public function getSocket()
+    public function getSocket():mixed
     {
         return $this->socket;
     }
@@ -27,7 +27,7 @@ class Client
         $this->authenticated = true;
     }
 
-    public function sendMessage($message)
+    public function sendMessage(String $message)
     {
         fwrite($this->socket, $message);
     }

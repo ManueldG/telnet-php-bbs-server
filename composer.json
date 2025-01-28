@@ -1,5 +1,5 @@
 {
-    "name": "manuel/server-socket",
+    "name": "manueldg/server-socket",
     "type": "project",
     "autoload": {
         "psr-4": {
