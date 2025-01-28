@@ -8,7 +8,7 @@ class Server
 {
     private $host;
     private $port;
-    private $peer;
+    
     private $serverSocket;
     private $clients = [];
     private $pdo;
@@ -40,6 +40,7 @@ class Server
     public function start()
     {
         $this->createServerSocket();
+
         echo "Telnet BBS started at telnet://{$this->host}:{$this->port}\n";
 
         while (true) {
@@ -54,7 +55,9 @@ class Server
     private function createServerSocket()
     {
         try{
+
             $this->serverSocket = stream_socket_server("tcp://{$this->host}:{$this->port}", $errno, $errstr);
+
         }catch(\Exception $e){
 
             echo $errno." :".$errstr;
@@ -67,30 +70,32 @@ class Server
 
 private function handleIncomingConnections()
 {    
-    $read[] = $this->serverSocket;    
+    
+    $connections[] = $this->serverSocket;
     
      // look for new connections
-     if ($sock = @stream_socket_accept($this->serverSocket, empty($read) ? -1 : 0, $peer)) {
+     
+     if ($sock = @stream_socket_accept($this->serverSocket, empty($connections) ? -1 : 0, $peer)) {
         
         //puntatore allo stream
         echo $peer.' connected'.PHP_EOL; //scrivo sul terminale
-
-        $this->peer = $peer;
         
-        $this->clients[] = new Client($sock, $this->pdo);    
+        $this->clients[] = new Client($sock, $this->pdo);   
+
         $this->sendBannerMessage($sock);
         
         fwrite($sock, 'Hello '.$peer.PHP_EOL); //scrivo al client
 
         $connections[] = $sock; //associo il puntatore alla connessione es $connections[127.0.0.1:51575]
         
-        $read = $connections; // read = connections  
 
     }    
 
     // wait for any stream data
     try {
-         $select = @stream_select($read, $write, $except, 5);
+
+         $select = @stream_select($connections, $write, $except, 5);
+
     }catch(\Exception $e){
 
         var_dump($except,$e);
@@ -99,7 +104,7 @@ private function handleIncomingConnections()
    
     if ($select > 0) {
 
-        foreach ($read as $c) {
+        foreach ($connections as $c) {
 
             $peer = stream_socket_get_name($c, true);
 
@@ -166,7 +171,7 @@ private function handleClientInteractions()
                 $client->sendMessage("\nAvailable commands: exit, help, info\n");
                 break;
             case 'info':
-                $client->sendMessage("\nInfo: " . $this->peer . " " . "\n");
+                $client->sendMessage("\nInfo: " . stream_socket_get_name($client->getSocket(), true) . " " . "\n"); 
                 break;
             default:
                 $client->sendMessage("\nUnknown command. Type 'help' for available commands.\n");
