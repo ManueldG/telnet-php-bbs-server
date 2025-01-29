@@ -8,21 +8,14 @@ use Telnet\Net\Server;
  //TODO  licenza
  //TODO documentazione 
  //TODO area per altre pagine 
+ //TODO implementare funzione messaggi 
 
 /**
- * PHP Telnet BBS Server
+ *  
  * 
- * This/ code is part of a Telnet Bulletin Board System (BBS) server implementation.
- * It allows multiple clients to connect over Telnet, register, and log in to the BBS.
- * Registered users can execute commands such as help and exit.
- * 
- * This specific implementation is based on the GPL-licensed code written by Federico Saccà in 2024.
- * 
- * 
- * 
- * @author Federico Saccà
+ * @author Manuel della Gala
  * @license GPL (GNU General Public License)
- * @link https://www.federicosacca.it
+ * @link www.manueldellagala.it
  * @link https://www.gnu.org/licenses/gpl-3.0.html
  */
 

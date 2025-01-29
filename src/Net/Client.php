@@ -29,7 +29,7 @@ class Client
 
     public function sendMessage(String $message)
     {
-        fwrite($this->socket, $message);
+        fwrite($this->socket, $message.PHP_EOL);
     }
 
 public function register()
@@ -103,10 +103,64 @@ public function login()
         }
     } else {
 
-        $this->sendMessage("Invalid input. Please try again.\n");
+        $this->sendMessage("Invalid input. Please try again.\n".PHP_EOL);
         fclose($this->socket); // Close client connection
         
     }
 }
 
+public function storeMessage(){
+
+    $this->sendMessage("Enter nickname recipient: ");
+    $nickname = rtrim(fgets($this->socket, 1024));
+
+    $this->sendMessage("Enter message: ");
+    $message = rtrim(fgets($this->socket, 1024));
+
+    if (!empty($nickname) && !empty($message)) {       
+
+        $stmt = $this->pdo->prepare("INSERT INTO messages ( nickname_id , message  ) VALUES( 
+            (
+                SELECT users.id FROM  users where users.nickname LIKE ?
+                ),?
+            )");
+
+        $stmt->execute([$nickname, $message]);
+
+        $this->sendMessage("\nMessage sended.\n");       
+    
+    
+        }
+    }
+
 }
+
+/**
+ * INSERT INTO messages (nickname_id, messages) 
+ * 
+ * VALUES(
+ * SELECT 
+ *   user.id, 
+ *   user.nickname,
+ *   messages.nickname_id
+ *   
+ *   FROM messages
+ *  JOIN user on messages.nickname_id = user.id;
+ * 
+ * )
+ * 
+ * SELECT users.id FROM  users where users.nickname LIKE "admin" ;
+ * 
+ * INSERT INTO massages ( nickname_id , message  ) VALUE( 
+*(SELECT users.id FROM  users where users.nickname LIKE "admin" ;),"ciao"
+**)
+*
+ * INSERT INTO massages ( nickname_id , message  ) VALUES( 
+*(
+*SELECT users.id FROM  users where users.nickname LIKE "admin" 
+*),"ciao"
+*)
+ */
+
+
+    

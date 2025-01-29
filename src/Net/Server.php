@@ -2,6 +2,7 @@
 namespace Telnet\Net;
 
 use Telnet\Net\Client;
+use Telnet\Net\Database;
 
 
 class Server
@@ -20,23 +21,26 @@ class Server
         
     }
 
+    /**
+     * 
+     * create database
+     * @return void
+     */
     public function initializeDatabase():void
-    {
+    { /*
         $dbFile = 'database.sqlite';
-        $this->pdo = new \PDO('sqlite:' . $dbFile);
-        $this->createUsersTable();
-    }
+        //$this->pdo = new \PDO('sqlite:' . $dbFile);
 
-    private function createUsersTable():void
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nickname VARCHAR(255) NOT NULL UNIQUE,
-                    password VARCHAR(255) NOT NULL
-                )";
-                
-        $this->pdo->exec($sql);
-    }
+        $this->pdo = new \PDO('mysql:host=localhost:3306;dbname=terminal',"root","");
+        */
+
+        $db = new Database();
+
+        $this->pdo = $db->getPdo();        
+
+        $db->createUsersTable();
+        $db->createMessageTable();
+    }   
 
     public function start():void
     {
@@ -164,10 +168,16 @@ private function handleClientInteractions():void
                 unset($this->client);
                 break;
             case 'help':
-                $client->sendMessage("\nAvailable commands: exit, help, info\n");
+                $client->sendMessage(PHP_EOL."Available commands: ".PHP_EOL."exit:close connection ".PHP_EOL."help: commands list".PHP_EOL."info: print detail connection".PHP_EOL."users: list users".PHP_EOL."message: to send a message to another user");
                 break;
             case 'info':
-                $client->sendMessage("\nInfo: " . stream_socket_get_name($client->getSocket(), true) . " " . "\n"); 
+                $client->sendMessage(PHP_EOL."Info: " . stream_socket_get_name($client->getSocket(), true) . " " . "\n"); 
+                break;
+            case 'users':
+                $client->sendMessage(PHP_EOL."Users: " .$this->listUsers(). " " . PHP_EOL); 
+                break;
+            case 'message':
+                $client->sendMessage(PHP_EOL."Users: " .$client->storeMessage(). " " . PHP_EOL); 
                 break;
             default:
                 $client->sendMessage("\nUnknown command. Type 'help' for available commands.\n");
@@ -219,4 +229,27 @@ MMMMMMMMMM     `MM                                  6MMMMb\
 DOC;
         fwrite($client, $bannerMessage);
     }
+
+    private function listUsers():string{
+
+        $stmt = $this->pdo->prepare("SELECT nickname FROM users ");
+
+        $stmt->execute();
+
+        $out = PHP_EOL;
+
+        while($existingUser = $stmt->fetch()){
+
+            $out .= $existingUser[0].PHP_EOL;
+
+        }
+
+        echo $out;
+
+
+        return $out;
+
+
+    }
+
 }
