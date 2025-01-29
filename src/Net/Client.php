@@ -121,7 +121,7 @@ public function storeMessage(){
 
         $stmt = $this->pdo->prepare("INSERT INTO messages ( nickname_id , message  ) VALUES( 
             (
-                SELECT users.id FROM  users where users.nickname LIKE ?
+                SELECT users.id FROM  users WHERE users.nickname LIKE ?
                 ),?
             )");
 
@@ -132,6 +132,30 @@ public function storeMessage(){
     
         }
     }
+
+    
+    public function readMessage():string{
+
+        $stmt = $this->pdo->prepare("SELECT messages.message,users.nickname FROM messages  LEFT JOIN users ON messages.nickname_id=users.id WHERE users.nickname LIKE \"admin\";");
+        
+        $stmt->execute();
+
+        $out = PHP_EOL;
+
+        while($existingUser = $stmt->fetch()){
+
+            $out .= $existingUser[0].PHP_EOL;
+
+        }
+
+        echo $out;
+
+        return $out;
+
+
+    }
+    
+    
 
 }
 

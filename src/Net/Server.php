@@ -179,6 +179,9 @@ private function handleClientInteractions():void
             case 'message':
                 $client->sendMessage(PHP_EOL."Users: " .$client->storeMessage(). " " . PHP_EOL); 
                 break;
+            case 'read':
+                $client->sendMessage(PHP_EOL."Users: " .$client->readMessage(). " " . PHP_EOL); 
+                break;
             default:
                 $client->sendMessage("\nUnknown command. Type 'help' for available commands.\n");
                 break;
