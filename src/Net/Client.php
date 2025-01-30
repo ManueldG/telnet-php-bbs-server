@@ -191,7 +191,7 @@ public function storeMessage(){
 
         }
 
-        $this->sendMessage("Message deleted"); 
+        $this->sendMessage("Message deleted!"); 
 
         /*
 
