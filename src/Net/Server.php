@@ -168,19 +168,31 @@ private function handleClientInteractions():void
                 unset($this->client);
                 break;
             case 'help':
-                $client->sendMessage(PHP_EOL."Available commands: ".PHP_EOL."exit:close connection ".PHP_EOL."help: commands list".PHP_EOL."info: print detail connection".PHP_EOL."users: list users".PHP_EOL."message: to send a message to another user");
+                $client->sendMessage(PHP_EOL.
+                "Available commands: ".PHP_EOL.
+                "exit:close connection ".PHP_EOL.
+                "help: commands list".PHP_EOL.
+                "info: print detail connection".PHP_EOL.
+                "users: list users".PHP_EOL.
+                "message: to send a message to another user".PHP_EOL.
+                "read: to read messages".PHP_EOL.
+                "del: to delete message".PHP_EOL                
+            );
                 break;
             case 'info':
                 $client->sendMessage(PHP_EOL."Info: " . stream_socket_get_name($client->getSocket(), true) . " " . "\n"); 
                 break;
             case 'users':
-                $client->sendMessage(PHP_EOL."Users: " .$this->listUsers(). " " . PHP_EOL); 
+                $client->sendMessage(PHP_EOL."Users: ".PHP_EOL .$this->listUsers(). " " . PHP_EOL); 
                 break;
             case 'message':
-                $client->sendMessage(PHP_EOL."Users: " .$client->storeMessage(). " " . PHP_EOL); 
+                $client->sendMessage(PHP_EOL." " .$client->storeMessage(). " " . PHP_EOL); 
                 break;
             case 'read':
-                $client->sendMessage(PHP_EOL."Users: " .$client->readMessage(). " " . PHP_EOL); 
+                $client->sendMessage(PHP_EOL." " .$client->readMessage(). " " . PHP_EOL); 
+                break;
+            case 'del':
+                $client->sendMessage(PHP_EOL." " .$client->delMessage(). " " . PHP_EOL); 
                 break;
             default:
                 $client->sendMessage("\nUnknown command. Type 'help' for available commands.\n");
@@ -233,25 +245,13 @@ DOC;
         fwrite($client, $bannerMessage);
     }
 
-    private function listUsers():string{
+    private function listUsers():string{        
 
-        $stmt = $this->pdo->prepare("SELECT nickname FROM users ");
+        $db = new Database();
 
-        $stmt->execute();
-
-        $out = PHP_EOL;
-
-        while($existingUser = $stmt->fetch()){
-
-            $out .= $existingUser[0].PHP_EOL;
-
-        }
-
-        echo $out;
-
+        $out = $db->sqlExecute("SELECT nickname FROM users" );
 
         return $out;
-
 
     }
 

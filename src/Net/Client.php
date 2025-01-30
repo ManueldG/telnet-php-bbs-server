@@ -1,5 +1,8 @@
 <?php
 namespace Telnet\Net;
+
+use PDOException;
+
 class Client
 {
     private $socket;
@@ -42,11 +45,11 @@ public function register()
 
     if (!empty($nickname) && !empty($password)) {
 
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE nickname = ?");
+        $db = new Database();
 
-        $stmt->execute([$nickname]);
+        $existingUser = $db->sqlExecute("SELECT * FROM users WHERE nickname = ?",[$nickname] );
 
-        $existingUser = $stmt->fetch();
+        echo $existingUser;
 
         if ($existingUser) {
 
@@ -125,7 +128,18 @@ public function storeMessage(){
                 ),?
             )");
 
-        $stmt->execute([$nickname, $message]);
+        try{
+            $stmt->execute([$nickname, $message]);
+        }
+        catch(\PDOException $e){
+
+            echo($e->getMessage());
+
+            $this->sendMessage("Invalid nickname");
+
+            return;
+
+        }
 
         $this->sendMessage("\nMessage sended.\n");       
     
@@ -136,7 +150,7 @@ public function storeMessage(){
     
     public function readMessage():string{
 
-        $stmt = $this->pdo->prepare("SELECT messages.message,users.nickname FROM messages  LEFT JOIN users ON messages.nickname_id=users.id WHERE users.nickname LIKE \"admin\";");
+        $stmt = $this->pdo->prepare("SELECT messages.id,messages.message,users.nickname FROM messages  LEFT JOIN users ON messages.nickname_id=users.id WHERE users.nickname LIKE \"admin\";");
         
         $stmt->execute();
 
@@ -144,7 +158,7 @@ public function storeMessage(){
 
         while($existingUser = $stmt->fetch()){
 
-            $out .= $existingUser[0].PHP_EOL;
+            $out .= $existingUser[0].") ".$existingUser[1]." from ".$existingUser[2].PHP_EOL;
 
         }
 
@@ -152,6 +166,52 @@ public function storeMessage(){
 
         return $out;
 
+
+    }
+
+    public function delMessage(){
+            
+        $this->sendMessage("Enter n° message to delete: ");
+        $id = rtrim(fgets($this->socket, 1024));
+
+        $db = new Database();
+
+        
+        try{
+            
+            $db->sqlExecute("DELETE FROM messages WHERE messages.id = ? ;",[$id]);
+
+        }
+        catch(\Exception $e){
+
+            echo $e->getMessage();
+            $this->sendMessage("Not deleted"); 
+
+            return;
+
+        }
+
+        $this->sendMessage("Message deleted"); 
+
+        /*
+
+        $stmt = $this->pdo->prepare("DELETE FROM messages WHERE messages.id = ? ;");
+        
+        try{
+
+            $stmt->execute([$id]);
+
+        }
+        catch(PDOException $e){
+
+            echo $e->getMessage();
+            $this->sendMessage("Not deleted"); 
+
+            return;
+
+        }
+
+        $this->sendMessage("Message deleted"); */
 
     }
     

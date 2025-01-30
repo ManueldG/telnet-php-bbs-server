@@ -73,4 +73,32 @@ class Database{
 
       } 
 
+      public function sqlExecute(string $sql, $param=[]):string{
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute($param);
+
+        $out = "";
+        $x = 0;
+
+        while($existingUser = $stmt->fetch()){
+
+            //$out .= $existingUser[0].PHP_EOL;
+            while($existingUser[$x]){
+
+                $out .= $existingUser[$x].PHP_EOL;
+                $x++;
+
+            }
+            $x=0;
+
+        }
+
+        echo $out;
+        
+        return $out;
+
+      } 
+
 }
