@@ -166,7 +166,7 @@ public function storeMessage(){
 
         $stmt = $this->pdo->prepare(" 
         
-        SELECT messages.id as sender, messages.message, dest.nickname FROM messages 
+        SELECT messages.id as sender, messages.message, sender.nickname FROM messages 
                 
         JOIN users as sender ON messages.sender_id = sender.id 
         JOIN users as dest ON messages.nickname_id = dest.id 
