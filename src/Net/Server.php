@@ -245,11 +245,18 @@ DOC;
         fwrite($client, $bannerMessage);
     }
 
-    private function listUsers():string{        
+    private function listUsers():string{ 
+        
+        $out = "";
 
         $db = new Database();
 
-        $out = $db->sqlExecute("SELECT nickname FROM users" );
+        $line = $db->sqlExecute("SELECT nickname FROM users" );
+
+        foreach($line as $val){
+            var_dump($val);
+            $out .= $val[0].PHP_EOL;
+        }
 
         return $out;
 
