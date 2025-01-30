@@ -14,7 +14,7 @@ git clone https://github.com/ManueldG/telnet-php-bbs-server.git
 ```
 
 ```bash
-composer create-project manueldg/server-socket=0.0.2beta <folder-name>
+composer create-project manueldg/server-socket=0.0.5beta <folder-name>
 ```
 
 ### 2. Run the Script
@@ -34,7 +34,7 @@ telnet server_ip_address port_number
 Replace server_ip_address with the IP address where your Telnet BBS server is running, and port_number with the port number specified in your script (default script is 2324 for Telnet).
 
 ### 4. Interact with the BBS
-For now you can register, log in, call up help, connection information and log out
+For now you can register, log in, call up help, connection information, send read and delete messages and log out
 
 ### 5. Terminate the Server
 To end the connection you can use ctrl + x
