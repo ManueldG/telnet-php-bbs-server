@@ -3,6 +3,7 @@
 namespace Telnet\Net;
 
 use PDO;
+use PDOException;
 
 class Database{
 
@@ -54,6 +55,7 @@ class Database{
           $sql = "CREATE TABLE IF NOT EXISTS messages (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               nickname_id INTEGER NOT NULL ,
+              sender_id INTEGER NOT NULL ,
               message VARCHAR(255) NOT NULL
           )";
 
@@ -73,30 +75,34 @@ class Database{
 
       } 
 
-      public function sqlExecute(string $sql, $param=[]):string{
+      public function sqlExecute(string $sql, $param=[]):array{
 
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->execute($param);
+        var_dump($param) ;
 
-        $out = "";
-        $x = 0;
+        try{
 
-        while($existingUser = $stmt->fetch()){
-
-            //$out .= $existingUser[0].PHP_EOL;
-            while($existingUser[$x]){
-
-                $out .= $existingUser[$x].PHP_EOL;
-                $x++;
-
-            }
-            $x=0;
+            $stmt->execute($param);
 
         }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
 
-        echo $out;
-        
+        $out = [];       
+
+        while($val = $stmt->fetch(PDO::FETCH_NUM)){
+
+            
+            //$out .= $existingUser[0].PHP_EOL;
+            var_dump($val);
+            
+                
+            $out[] = $val;                        
+
+        }
+       
         return $out;
 
       } 
