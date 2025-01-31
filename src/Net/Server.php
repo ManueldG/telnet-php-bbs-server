@@ -12,7 +12,7 @@ class Server
     
     private $serverSocket;
     private $clients = [];
-    private $pdo;
+    private $db;
 
     public function __construct($host, $port)
     {
@@ -27,19 +27,11 @@ class Server
      * @return void
      */
     public function initializeDatabase():void
-    { /*
-        $dbFile = 'database.sqlite';
-        //$this->pdo = new \PDO('sqlite:' . $dbFile);
+    {         
+        $this->db = new Database();
 
-        $this->pdo = new \PDO('mysql:host=localhost:3306;dbname=terminal',"root","");
-        */
-
-        $db = new Database();
-
-        $this->pdo = $db->getPdo();        
-
-        $db->createUsersTable();
-        $db->createMessageTable();
+        $this->db->createUsersTable();
+        $this->db->createMessageTable();
     }   
 
     public function start():void
@@ -48,13 +40,16 @@ class Server
 
         echo "Telnet BBS started at telnet://{$this->host}:{$this->port}\n";
 
-        while (true) {
+        $cicle = true;
+
+        while ($cicle) {
             
             $this->handleIncomingConnections();
             
             $this->handleClientInteractions();            
 
         }
+        
     }
 
     private function createServerSocket():void
@@ -83,7 +78,7 @@ private function handleIncomingConnections():void
         //puntatore allo stream
         echo $peer.' connected'.PHP_EOL; //scrivo sul terminale
         
-        $this->clients[] = new Client($sock, $this->pdo);   
+        $this->clients[] = new Client($sock, $this->db);   
 
         $this->sendBannerMessage($sock);
         
@@ -247,14 +242,12 @@ DOC;
 
     private function listUsers():string{ 
         
-        $out = "";
+        $out = "";       
 
-        $db = new Database();
-
-        $line = $db->sqlExecute("SELECT nickname FROM users" );
+        $line = $this->db->sqlExecute("SELECT nickname FROM users" );
 
         foreach($line as $val){
-            var_dump($val);
+            
             $out .= $val[0].PHP_EOL;
         }
 

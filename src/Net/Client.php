@@ -65,14 +65,6 @@ public function register()
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            /*
-
-            $stmt = $this->pdo->prepare("INSERT INTO users (nickname, password) VALUES (?, ?)");
-
-            $stmt->execute([$nickname, $hashedPassword]);
-
-            */
-
             $db->sqlExecute("INSERT INTO users (nickname, password) VALUES (?, ?)",[$this->nickname,$hashedPassword]);
 
             $this->sendMessage("\nRegistration successful. You are now logged in.\n");
@@ -99,12 +91,12 @@ public function login()
 
     if (!empty($this->nickname) && !empty($password)) {
 
-        
-            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE nickname = ?");
-            $stmt->execute([$this->nickname]);
-            $user = $stmt->fetch();       
+            $res = $this->pdo->sqlExecute("SELECT nickname, password FROM users WHERE nickname = ?",[$this->nickname]);
+            var_dump($res);
+            $user = $res[0][0];
+            $pass = $res[0][1];
 
-        if ($user && password_verify($password, $user['password'])) {
+        if ($user && password_verify($password, $pass)) {
 
             $this->authenticate();
             $this->sendMessage("Login successful. Welcome, ". $this->nickname."\n");
@@ -132,28 +124,16 @@ public function storeMessage(){
     $this->sendMessage("Enter message: ");
     $message = rtrim(fgets($this->socket, 1024));
 
-    if (!empty($nickname) && !empty($message)) {       
-
-        $stmt = $this->pdo->prepare("INSERT INTO messages ( nickname_id , sender_id, message  ) VALUES( 
+    if (!empty($nickname) && !empty($message)) {    
+        
+        $this->pdo->sqlExecute("INSERT INTO messages ( nickname_id , sender_id, message  ) VALUES( 
             (
                 SELECT users.id FROM  users WHERE users.nickname LIKE ?
                 ),(
                 SELECT users.id FROM  users WHERE users.nickname LIKE ?
                 ),?
-            )");
+            )",[$nickname,$this->nickname ,$message]);
 
-        try{
-            $stmt->execute([$nickname,$this->nickname ,$message]);
-        }
-        catch(\PDOException $e){
-
-            echo($e->getMessage());
-
-            $this->sendMessage("Invalid nickname");
-
-            return;
-
-        }
 
         $this->sendMessage("\nMessage sended.\n");       
     
@@ -164,7 +144,7 @@ public function storeMessage(){
     
     public function readMessage():string{
 
-        $stmt = $this->pdo->prepare(" 
+        $res = $this->pdo->sqlExecute(" 
         
         SELECT messages.id as sender, messages.message, sender.nickname FROM messages 
                 
@@ -173,18 +153,15 @@ public function storeMessage(){
         
         WHERE dest.nickname = ?;
         
-        ");
+        ",[$this->nickname]);
 
-        
-        $stmt->execute([$this->nickname]);
 
         $out = PHP_EOL;
+       
 
-        while($existingUser = $stmt->fetch()){
+        foreach($res as $val){
 
-            var_dump($existingUser);
-
-            $out .= $existingUser[0].") ".$existingUser[1]." from ".$existingUser[2].PHP_EOL;
+            $out .= $val[0].") ".$val[1]." from ".$val[2].PHP_EOL;
 
         }
 
@@ -219,58 +196,13 @@ public function storeMessage(){
 
         $this->sendMessage("Message deleted"); 
 
-        /*
-
-        $stmt = $this->pdo->prepare("DELETE FROM messages WHERE messages.id = ? ;");
-        
-        try{
-
-            $stmt->execute([$id]);
-
-        }
-        catch(PDOException $e){
-
-            echo $e->getMessage();
-            $this->sendMessage("Not deleted"); 
-
-            return;
-
-        }
-
-        $this->sendMessage("Message deleted"); */
+       
 
     }
     
     
 
 }
-
-/**
- * INSERT INTO messages (nickname_id, messages) 
- * 
- * VALUES(
- * SELECT 
- *   user.id, 
- *   user.nickname,
- *   messages.nickname_id
- *   
- *   FROM messages
- *  JOIN user on messages.nickname_id = user.id;
- * 
- * )
- * 
- * SELECT users.id FROM  users where users.nickname LIKE "admin" ;
- * 
- * INSERT INTO massages ( nickname_id , message  ) VALUE( 
-*(SELECT users.id FROM  users where users.nickname LIKE "admin" ;),"ciao"
-**)
-*
- * INSERT INTO massages ( nickname_id , message  ) VALUES( 
-*(
-*SELECT users.id FROM  users where users.nickname LIKE "admin" 
-*),"ciao"
-*)
- */
 
 
     

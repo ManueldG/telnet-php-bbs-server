@@ -4,11 +4,12 @@ namespace Telnet;
 use Telnet\Net\Server;
 
 
- //IN PROGRESS  Pulizia codice  in corso divisione in classi
+ //DONE  Pulizia codice  in corso divisione in classi ok
  //DONE  licenza
+ //DONE implementare funzione messaggi fatta 
+ //TODO gestione messaggi in caso di successo o fallimento comando
  //TODO documentazione fatta ma da aggiornare con la nuova versione
  //TODO area per altre pagine 
- //DONE implementare funzione messaggi fatta manca quella per togliere i vecchi messaggi
 
  
 
