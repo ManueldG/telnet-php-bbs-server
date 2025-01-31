@@ -14,7 +14,7 @@ git clone https://github.com/ManueldG/telnet-php-bbs-server.git
 ```
 
 ```bash
-composer create-project manueldg/server-socket:0.0.7-beta  <folder-name>
+composer create-project manueldg/server-socket  <folder-name>
 ```
 
 ### 2. Config
