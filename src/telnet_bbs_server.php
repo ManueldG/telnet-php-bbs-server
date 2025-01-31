@@ -9,11 +9,12 @@ use Telnet\Net\Server;
  //DONE implementare funzione messaggi fatta 
  //TODO gestione messaggi in caso di successo o fallimento comando
  //TODO documentazione fatta ma da aggiornare con la nuova versione
+ //TODO documentare le funzioni classi
  //TODO area per altre pagine 
-
- 
+ //TODO gestire funzioni in caso di uso mysql 
 
 /**  
+ * For now you can register, log in, call up help, connection information, send read and delete messages and log out
  * 
  * @author Manuel della Gala
  * @license GPL (GNU General Public License)

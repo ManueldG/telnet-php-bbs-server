@@ -24,9 +24,16 @@ class Database{
             $this->pdo = new \PDO('sqlite:' . $dbFile);
 
         }
-        else{
+        else if($this->driver == "mysql"){
+
+            $hostdb = $env['HOSTDB']; 
+            $portdb = $env['PORTDB']; 
+            $databases = $env['DBASEDB']; 
+
+            $user = $env['USER']; 
+            $password = $env['PASS']; 
             
-            $this->pdo = new \PDO('mysql:host=localhost:3306;dbname=terminal',"root","");
+            $this->pdo = new \PDO('mysql:host='.$hostdb.':'.$portdb.';dbname='.$databases,$user,$password);
 
         }
       }
@@ -62,6 +69,7 @@ class Database{
           $mysql = "CREATE TABLE IF NOT EXISTS messages (
             id INT PRIMARY KEY AUTO_INCREMENT,
             nickname_id INT NOT NULL ,
+             sender_id INT NOT NULL ,
             message VARCHAR(255) NOT NULL
           )";
           
