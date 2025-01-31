@@ -7,11 +7,11 @@ use Telnet\Net\Server;
  //DONE  Pulizia codice  in corso divisione in classi ok
  //DONE  licenza
  //DONE implementare funzione messaggi fatta 
+ //DONE gestire funzioni in caso di uso mysql + foreign key 
  //TODO gestione messaggi in caso di successo o fallimento comando
  //TODO documentazione fatta ma da aggiornare con la nuova versione
  //TODO documentare le funzioni classi
  //TODO area per altre pagine 
- //TODO gestire funzioni in caso di uso mysql 
 
 /**  
  * For now you can register, log in, call up help, connection information, send read and delete messages and log out

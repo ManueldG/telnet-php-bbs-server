@@ -51,7 +51,8 @@ class Database{
                       nickname VARCHAR(255) NOT NULL UNIQUE,
                       password VARCHAR(255) NOT NULL
                     )";
-                  
+
+     
           $this->pdo->exec( $this->driver=='sqlite' ? $sql : $mysql);
           
       }
@@ -63,15 +64,21 @@ class Database{
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               nickname_id INTEGER NOT NULL ,
               sender_id INTEGER NOT NULL ,
-              message VARCHAR(255) NOT NULL
+              message VARCHAR(255) NOT NULL,
+
+              FOREIGN KEY(nickname_id) REFERENCES users(id),
+              FOREIGN KEY(sender_id) REFERENCES users(id)
           )";
 
           $mysql = "CREATE TABLE IF NOT EXISTS messages (
             id INT PRIMARY KEY AUTO_INCREMENT,
             nickname_id INT NOT NULL ,
-             sender_id INT NOT NULL ,
-            message VARCHAR(255) NOT NULL
-          )";
+            sender_id INT NOT NULL ,
+            message VARCHAR(255) NOT NULL);
+            ALTER TABLE `messages` ADD CONSTRAINT `users_messages` FOREIGN KEY (`nickname_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT; 
+            ALTER TABLE `messages` ADD CONSTRAINT `users_messages_senders` FOREIGN KEY (`sender_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT; 
+     
+            ";
           
           $this->pdo->exec( $this->driver=='sqlite' ? $sql : $mysql);
           
@@ -93,7 +100,7 @@ class Database{
 
         }
         catch(PDOException $e){
-            
+
             echo $e->getMessage();
         }
 
