@@ -75,14 +75,14 @@ private function handleIncomingConnections():void
      // look for new connections     
      if ($sock = @stream_socket_accept($this->serverSocket, empty($connections) ? -1 : 0, $peer)) {
         
-        //puntatore allo stream
-        echo $peer.' connected'.PHP_EOL; //scrivo sul terminale
+        //pointer to the stream
+        echo $peer.' connected'.PHP_EOL; 
         
         $this->clients[] = new Client($sock, $this->db);   
 
         $this->sendBannerMessage($sock);
         
-        fwrite($sock, 'Hello '.$peer.PHP_EOL); //scrivo al client
+        fwrite($sock, 'Hello '.$peer.PHP_EOL); 
 
         $connections[] = $sock;         
 

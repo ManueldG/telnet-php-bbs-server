@@ -92,7 +92,7 @@ public function login()
     if (!empty($this->nickname) && !empty($password)) {
 
             $res = $this->pdo->sqlExecute("SELECT nickname, password FROM users WHERE nickname = ?",[$this->nickname]);
-            var_dump($res);
+        
             $user = $res[0][0];
             $pass = $res[0][1];
 

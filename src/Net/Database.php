@@ -87,25 +87,19 @@ class Database{
 
         $stmt = $this->pdo->prepare($sql);
 
-        var_dump($param) ;
-
         try{
 
             $stmt->execute($param);
 
         }
         catch(PDOException $e){
+            
             echo $e->getMessage();
         }
 
         $out = [];       
 
-        while($val = $stmt->fetch(PDO::FETCH_NUM)){
-
-            
-            //$out .= $existingUser[0].PHP_EOL;
-            var_dump($val);
-            
+        while($val = $stmt->fetch(PDO::FETCH_NUM)){            
                 
             $out[] = $val;                        
 
