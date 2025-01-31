@@ -7,7 +7,7 @@ use PDOException;
 
 class Database{
 
-    private $pdo = null;
+    private $pdo = null; // XXX non dovrei usarlo 
 
     private $driver;
 

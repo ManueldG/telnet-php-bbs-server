@@ -8,12 +8,12 @@ class Client
     private $socket;
     private $authenticated = false;
     private $nickname;
-    private $pdo;
+    private $db;  // XXX database instance
 
-    public function __construct($socket, $pdo)
+    public function __construct($socket, $db)
     {
         $this->socket = $socket;
-        $this->pdo = $pdo;
+        $this->db = $db;
     }
 
     public function getSocket():mixed
@@ -53,7 +53,9 @@ public function register()
             $existingUser = $db->sqlExecute("SELECT * FROM users WHERE nickname LIKE ? ",[$this->nickname] );
         }
         catch(\PDOException $e){
+
             var_dump($e);
+
         };
        
         if ($existingUser) {
@@ -91,7 +93,7 @@ public function login()
 
     if (!empty($this->nickname) && !empty($password)) {
 
-            $res = $this->pdo->sqlExecute("SELECT nickname, password FROM users WHERE nickname = ?",[$this->nickname]);
+            $res = $this->db->sqlExecute("SELECT nickname, password FROM users WHERE nickname = ?",[$this->nickname]);
         
             $user = $res[0][0];
             $pass = $res[0][1];
@@ -126,7 +128,7 @@ public function storeMessage(){
 
     if (!empty($nickname) && !empty($message)) {    
         
-        $this->pdo->sqlExecute("INSERT INTO messages ( nickname_id , sender_id, message  ) VALUES( 
+        $this->db->sqlExecute("INSERT INTO messages ( nickname_id , sender_id, message  ) VALUES( 
             (
                 SELECT users.id FROM  users WHERE users.nickname LIKE ?
                 ),(
@@ -144,7 +146,7 @@ public function storeMessage(){
     
     public function readMessage():string{
 
-        $res = $this->pdo->sqlExecute(" 
+        $res = $this->db->sqlExecute(" 
         
         SELECT messages.id as sender, messages.message, sender.nickname FROM messages 
                 
@@ -164,8 +166,6 @@ public function storeMessage(){
             $out .= $val[0].") ".$val[1]." from ".$val[2].PHP_EOL;
 
         }
-
-        echo $out;
 
         return $out;
 
