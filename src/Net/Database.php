@@ -13,7 +13,7 @@ class Database{
 
     function __construct(){
 
-        $env = parse_ini_file(__DIR__.'../.env');
+        $env = parse_ini_file(__DIR__.'/../../.env');
 
         $this->driver = $env['DRIVER'];
 
