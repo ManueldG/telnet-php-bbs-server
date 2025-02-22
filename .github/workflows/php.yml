@@ -30,7 +30,18 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      run: |
+        composer install --prefer-dist --no-progress
+        
+       
+    - name: Run server
+      run: |
+        timeout --preserve-status 30s php ./src/index.php || true
+        echo $?
+        
+      
+      
+      
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
