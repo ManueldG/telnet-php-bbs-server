@@ -22,7 +22,7 @@ use Telnet\Net\Server;
  * @link https://www.gnu.org/licenses/gpl-3.0.html
  */
 
- $env = parse_ini_file('../.env');
+ $env = parse_ini_file(__DIR__.'/../.env');
 
  $host = $env["HOST"];
  $port = $env["PORT"];
