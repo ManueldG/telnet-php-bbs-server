@@ -1,3 +1,4 @@
+[![Open Source Helpers](https://www.codetriage.com/manueldg/telnet-php-bbs-server/badges/users.svg)](https://www.codetriage.com/manueldg/telnet-php-bbs-server)
 # Telnet PHP BBS Server
 
 This repository cloned from https://github.com/Rotron/telnet-php-bbs-server modified and customized
